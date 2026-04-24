@@ -1,65 +1,184 @@
-import Image from "next/image";
+import HeroSection from "@/components/home/HeroSection";
+import JobCard, { Job } from "@/components/jobs/JobCard";
+import Sidebar from "@/components/home/Sidebar";
 
-export default function Home() {
+const sampleJobs: Job[] = [
+  {
+    title: "Senior Python Developer",
+    company: "Acme Tech Ltd.",
+    address: "123 Silicon Street",
+    city: "Austin",
+    state: "Texas",
+    country: "USA",
+    postalCode: "TX 78701",
+    salary: "$120,000 – $150,000 / yr",
+    workType: "Remote",
+    datePosted: "22 Apr 2026",
+    expiryDate: "22 May 2026",
+    badge: "Editors Choice",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+        .home-body {
+          background: #0f0f1a;
+          min-height: 100vh;
+        }
+
+        .home-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 3rem 2rem;
+          display: grid;
+          grid-template-columns: 1fr 280px;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .home-jobs {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .home-jobs-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .home-jobs-title {
+          font-family: 'Source Code Pro', monospace;
+          font-size: 1rem;
+          font-weight: 700;
+          color: #FFD43B;
+          letter-spacing: 1px;
+        }
+
+        .home-jobs-count {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.8rem;
+          color: #4a5680;
+        }
+
+        .home-jobs-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
+        }
+
+        .home-empty-state {
+          padding: 1.5rem;
+          border: 1px dashed rgba(255, 212, 59, 0.4);
+          border-radius: 12px;
+          color: #cbd5e1;
+          font-family: 'DM Sans', sans-serif;
+          background: rgba(255, 255, 255, 0.02);
+        }
+
+        .home-publish-cta {
+          background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+          border: 1.5px solid rgba(255,212,59,0.25);
+          border-radius: 12px;
+          padding: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+        }
+
+        .home-publish-cta-text h2 {
+          font-family: 'Source Code Pro', monospace;
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #ffffff;
+          margin-bottom: 0.4rem;
+        }
+
+        .home-publish-cta-text p {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.875rem;
+          color: #7a8ab8;
+        }
+
+        .home-publish-cta-btn {
+          background: #FFD43B;
+          color: #1a1a2e;
+          border: none;
+          border-radius: 8px;
+          padding: 0.75rem 1.75rem;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: background 0.2s;
+          flex-shrink: 0;
+        }
+
+        .home-publish-cta-btn:hover {
+          background: #ffe873;
+        }
+
+        @media (max-width: 1024px) {
+          .home-jobs-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .home-content {
+            grid-template-columns: 1fr;
+          }
+
+          .home-jobs-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+
+      <div className="home-body">
+        <HeroSection />
+
+        <div className="home-content">
+          <div className="home-jobs">
+            <div className="home-jobs-header">
+              <h2 className="home-jobs-title">// Latest Python Jobs</h2>
+              <span className="home-jobs-count">
+                Showing {sampleJobs.length} of 50+ jobs today
+              </span>
+            </div>
+
+            {sampleJobs.length > 0 ? (
+              <div className="home-jobs-grid">
+                {sampleJobs.map((job, index) => (
+                  <JobCard key={index} job={job} />
+                ))}
+              </div>
+            ) : (
+              <div className="home-empty-state">
+                No jobs are available right now.
+              </div>
+            )}
+
+            <div className="home-publish-cta">
+              <div className="home-publish-cta-text">
+                <h2>Publish a Python Job</h2>
+                <p>Reach thousands of Python developers actively looking for their next role.</p>
+              </div>
+              <button className="home-publish-cta-btn">Post a Job →</button>
+            </div>
+          </div>
+
+          <Sidebar />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

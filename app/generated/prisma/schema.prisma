@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Companies Table ──────────────────────────────────────────────────────────
+
+model Company {
+  id                 Int      @id @default(autoincrement())
+  name               String
+  legalName          String?
+  url                String?
+  description        String?
+  logo               String?
+  image              String?
+  streetAddress      String?
+  addressLocality    String?
+  addressRegion      String?
+  postalCode         String?
+  addressCountry     String?
+  telephone          String?
+  email              String?
+  contactType        String?
+  areaServed         String?
+  availableLanguage  String?
+  sameAs             String?
+  taxID              String?
+  vatID              String?
+  duns               String?
+  leiCode            String?
+  iso6523Code        String?
+  foundingDate       String?
+  foundingLocation   String?
+  numberOfEmployees  String?
+  parentOrganization String?
+  subOrganization    String?
+  award              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  jobs               Job[]
+}
+
+// ─── Jobs Table ───────────────────────────────────────────────────────────────
+
+model Job {
+  id Int @id @default(autoincrement())
+
+  // Identity
+  title        String
+  description  String?
+  identifier   String?
+  jobId        String?
+  slug         String  @unique
+  datePosted   String?
+  validThrough String?
+  dateModified String?
+
+  // Hiring Organization
+  companyId       Int?
+  company         Company? @relation(fields: [companyId], references: [id])
+  hiringOrgName   String?
+  hiringOrgUrl    String?
+  hiringOrgLogo   String?
+  hiringOrgSameAs String?
+
+  // Location
+  streetAddress                 String?
+  addressLocality               String?
+  addressRegion                 String?
+  postalCode                    String?
+  addressCountry                String?
+  jobLocationType               String?
+  applicantLocationRequirements String?
+
+  // Employment Details
+  employmentType    String?
+  workHours         String?
+  jobStartDate      String?
+  jobDuration       String?
+  jobImmediateStart Boolean?
+  totalJobOpenings  Int?
+  employmentUnit    String?
+
+  // Salary
+  salaryValue     String?
+  baseSalary      String?
+  salaryCurrency  String?
+  salaryUnitText  String?
+  estimatedSalary String?
+
+  // Requirements
+  educationRequirements        String?
+  experienceRequirements       String?
+  experienceInPlaceOfEducation Boolean?
+  qualifications               String?
+  skills                       String?
+  physicalRequirement          String?
+  sensoryRequirement           String?
+  securityClearanceRequirement String?
+
+  // Job Details
+  responsibilities     String?
+  industry             String?
+  occupationalCategory String?
+  specialCommitments   String?
+
+  // Compensation & Benefits
+  incentives            String?
+  incentiveCompensation String?
+  benefits              String?
+  jobBenefits           String?
+
+  // Application
+  applyUrl            String?
+  applicationContact  String?
+  applicationDeadline String?
+  directApply         Boolean?
+
+  // Custom Fields
+  category       String?
+  seniority      String?
+  isActive       Boolean @default(true)
+  whoShouldApply String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
