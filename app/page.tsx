@@ -1,25 +1,30 @@
 import HeroSection from "@/components/home/HeroSection";
 import JobCard, { Job } from "@/components/jobs/JobCard";
 import Sidebar from "@/components/home/Sidebar";
+import { prisma } from "@/lib/prisma";
 
-const sampleJobs: Job[] = [
-  {
-    title: "Senior Python Developer",
-    company: "Acme Tech Ltd.",
-    address: "123 Silicon Street",
-    city: "Austin",
-    state: "Texas",
-    country: "USA",
-    postalCode: "TX 78701",
-    salary: "$120,000 – $150,000 / yr",
-    workType: "Remote",
-    datePosted: "22 Apr 2026",
-    expiryDate: "22 May 2026",
-    badge: "Editors Choice",
-  },
-];
+export default async function HomePage() {
+  const rawJobs = await prisma.job.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+  });
 
-export default function HomePage() {
+  const jobs: Job[] = rawJobs.map((j) => ({
+    title: j.title,
+    company: j.hiringOrgName || "",
+    address: j.streetAddress || "",
+    city: j.addressLocality || "",
+    state: j.addressRegion || "",
+    country: j.addressCountry || "",
+    postalCode: j.postalCode || "",
+    salary: j.salaryValue || "",
+    workType: j.employmentType || "",
+    datePosted: j.datePosted || "",
+    expiryDate: j.validThrough || "",
+    badge: j.category || "",
+  }));
+
   return (
     <>
       <style>{`
@@ -151,13 +156,13 @@ export default function HomePage() {
             <div className="home-jobs-header">
               <h2 className="home-jobs-title">// Latest Python Jobs</h2>
               <span className="home-jobs-count">
-                Showing {sampleJobs.length} of 50+ jobs today
+                Showing {jobs.length} of 50+ jobs today
               </span>
             </div>
 
-            {sampleJobs.length > 0 ? (
+            {jobs.length > 0 ? (
               <div className="home-jobs-grid">
-                {sampleJobs.map((job, index) => (
+                {jobs.map((job, index) => (
                   <JobCard key={index} job={job} />
                 ))}
               </div>
